@@ -34,7 +34,6 @@ params = {'p': np.linspace(1, 10, 200) }
 
 kf = KFold(n_splits=5, shuffle=True, random_state=42)
 
-
 gsearch1 = GridSearchCV(estimator = KNeighborsRegressor(n_neighbors=5, weights='distance'),
 param_grid = params, scoring='neg_mean_squared_error', cv=kf)
 
