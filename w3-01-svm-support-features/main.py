@@ -1,5 +1,7 @@
 import pandas as pd
 from sklearn.svm import SVC
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 # 1. Загрузите выборку из файла svm-data.csv. В нем записана двумерная выборка
@@ -25,3 +27,20 @@ clf.fit(X, y)
 
 sv = [n + 1 for n in sorted(list(clf.support_))]
 print(sv)
+
+# Plotting
+x_min, x_max = X[1].min(), X[1].max()
+y_min, y_max = X[2].min(), X[2].max()
+
+XX, YY = np.mgrid[x_min:x_max:200j, y_min:y_max:200j]
+Z = clf.decision_function(np.c_[XX.ravel(), YY.ravel()])
+
+# Put the result into a color plot
+Z = Z.reshape(XX.shape)
+# plt.pcolormesh(XX, YY, Z > 0, cmap=plt.cm.Paired)
+plt.contour(XX, YY, Z, colors=['k', 'k', 'k'], linestyles=['--', '-', '--'],
+            levels=[-.5, 0, .5])
+plt.scatter(clf.support_vectors_[:, 0], clf.support_vectors_[:, 1], s=80,
+            facecolors='none', zorder=10, edgecolors='k')
+plt.scatter(X[1], X[2], c=y, cmap=plt.cm.coolwarm, s=20, edgecolors='k')
+plt.show()
